@@ -1,0 +1,474 @@
+{
+  "DCR-2026-0001": {
+    "id": "DCR-2026-0001",
+    "name": "DCR-2026-0001",
+    "description": "Discovered from trace TRACE-20260619-0001",
+    "severity": "high",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "tool"
+      },
+      {
+        "agent": "bob",
+        "action": "tool"
+      }
+    ],
+    "witness_hash": "4404c18fc77261e175bbb8801a73fa355d83c6401478de2015b64ace20cf7e63",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.8,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 22:36:27.670565",
+    "last_updated": "2026-06-19 22:52:18.952806",
+    "affected_traces": [
+      "TRACE-20260619-0001"
+    ],
+    "discovered_by": "DecisionAssure",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 3,
+    "previously_missed_incidents": 3,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0002": {
+    "id": "DCR-2026-0002",
+    "name": "DCR-2026-0002",
+    "description": "Discovered from trace TRACE-20260619-0002",
+    "severity": "low",
+    "required_actions": [
+      {
+        "agent": "researcher",
+        "action": "execute_task"
+      },
+      {
+        "agent": "exporter",
+        "action": "execute_task"
+      }
+    ],
+    "witness_hash": "3df31624719e1c3c78d0e303654a4e5b18e5a47069a292012df5868a15ad9b4a",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.8,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 22:53:35.966368",
+    "last_updated": "2026-06-19 22:53:35.968726",
+    "affected_traces": [
+      "TRACE-20260619-0002"
+    ],
+    "discovered_by": "DecisionAssure",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0003": {
+    "id": "DCR-2026-0003",
+    "name": "DCR-2026-0003",
+    "description": "Discovered from trace TRACE-20260619-0003",
+    "severity": "critical",
+    "required_actions": [
+      {
+        "agent": "researcher",
+        "action": "message"
+      },
+      {
+        "agent": "researcher",
+        "action": "message"
+      },
+      {
+        "agent": "compliance_officer",
+        "action": "message"
+      }
+    ],
+    "witness_hash": "6fcfd7bfdb06630a0b9ff508352d2395e436731afe220e636aa9b2866de68858",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.8,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 22:54:12.788951",
+    "last_updated": "2026-06-19 22:54:12.790859",
+    "affected_traces": [
+      "TRACE-20260619-0003"
+    ],
+    "discovered_by": "DecisionAssure",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0004": {
+    "id": "DCR-2026-0004",
+    "name": "DCR-2026-0005",
+    "description": "Discovered from trace TRACE-20260619-0004",
+    "severity": "medium",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "read_credentials"
+      },
+      {
+        "agent": "bob",
+        "action": "export_data"
+      }
+    ],
+    "witness_hash": "6cbc92789eb795d50eb04a67b3f50ba2779f7535829b380fc14dec3c87c6a050",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.8,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:02:08.280084",
+    "last_updated": "2026-06-19 23:02:25.444116",
+    "affected_traces": [
+      "TRACE-20260619-0004"
+    ],
+    "discovered_by": "DecisionAssure",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 1,
+    "previously_missed_incidents": 1,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0005": {
+    "id": "DCR-2026-0005",
+    "name": "Credential Exfiltration",
+    "description": "Agents collectively gather and export credentials.",
+    "severity": "critical",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "read_credentials"
+      },
+      {
+        "agent": "bob",
+        "action": "export_data"
+      }
+    ],
+    "witness_hash": "seed_credential_exfiltration",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.95,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.922286",
+    "last_updated": "2026-06-19 23:08:35.923629",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0006": {
+    "id": "DCR-2026-0006",
+    "name": "Model Exfiltration",
+    "description": "Agents export proprietary AI models.",
+    "severity": "critical",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "read_model"
+      },
+      {
+        "agent": "bob",
+        "action": "export_model"
+      }
+    ],
+    "witness_hash": "seed_model_exfiltration",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.93,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.924363",
+    "last_updated": "2026-06-19 23:08:35.925282",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0007": {
+    "id": "DCR-2026-0007",
+    "name": "Hidden Delegation Chain",
+    "description": "Agents delegate authority without explicit approval.",
+    "severity": "high",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "delegate"
+      },
+      {
+        "agent": "bob",
+        "action": "delegate"
+      }
+    ],
+    "witness_hash": "seed_hidden_delegation",
+    "counterfactual_verified": true,
+    "governance_decision": "HUMAN_REVIEW",
+    "confidence": 0.88,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.926091",
+    "last_updated": "2026-06-19 23:08:35.927042",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0008": {
+    "id": "DCR-2026-0008",
+    "name": "Recursive Self-Delegation",
+    "description": "An agent repeatedly delegates authority to itself.",
+    "severity": "high",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "delegate_to_self"
+      },
+      {
+        "agent": "alice",
+        "action": "delegate_to_self"
+      }
+    ],
+    "witness_hash": "seed_recursive_delegation",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.9,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.927973",
+    "last_updated": "2026-06-19 23:08:35.929242",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0009": {
+    "id": "DCR-2026-0009",
+    "name": "Autonomous Tool Chaining",
+    "description": "Agents autonomously chain multiple tools without oversight.",
+    "severity": "medium",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "tool_a"
+      },
+      {
+        "agent": "bob",
+        "action": "tool_b"
+      }
+    ],
+    "witness_hash": "seed_tool_chaining",
+    "counterfactual_verified": true,
+    "governance_decision": "MONITOR",
+    "confidence": 0.82,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.930281",
+    "last_updated": "2026-06-19 23:08:35.931482",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0010": {
+    "id": "DCR-2026-0010",
+    "name": "Approval Bypass",
+    "description": "Agents circumvent approval workflows.",
+    "severity": "critical",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "bypass_check"
+      }
+    ],
+    "witness_hash": "seed_approval_bypass",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.92,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.932464",
+    "last_updated": "2026-06-19 23:08:35.933775",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0011": {
+    "id": "DCR-2026-0011",
+    "name": "Policy Drift",
+    "description": "Agents continue execution under outdated policies.",
+    "severity": "high",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "execute_outdated_policy"
+      }
+    ],
+    "witness_hash": "seed_policy_drift",
+    "counterfactual_verified": true,
+    "governance_decision": "HUMAN_REVIEW",
+    "confidence": 0.85,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.934774",
+    "last_updated": "2026-06-19 23:08:35.935985",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0012": {
+    "id": "DCR-2026-0012",
+    "name": "Shadow Planning",
+    "description": "Agents plan actions without recording intent.",
+    "severity": "medium",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "plan_secretly"
+      }
+    ],
+    "witness_hash": "seed_shadow_planning",
+    "counterfactual_verified": true,
+    "governance_decision": "MONITOR",
+    "confidence": 0.78,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.937060",
+    "last_updated": "2026-06-19 23:08:35.938149",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0013": {
+    "id": "DCR-2026-0013",
+    "name": "Cross-Agent Leakage",
+    "description": "Information leaks between agents without authorization.",
+    "severity": "high",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "share_data"
+      },
+      {
+        "agent": "bob",
+        "action": "receive_data"
+      }
+    ],
+    "witness_hash": "seed_cross_agent_leakage",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.89,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.939240",
+    "last_updated": "2026-06-19 23:08:35.940413",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0014": {
+    "id": "DCR-2026-0014",
+    "name": "Unauthorized Model Export",
+    "description": "Agents export models without authorization.",
+    "severity": "critical",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "export_model_without_approval"
+      }
+    ],
+    "witness_hash": "seed_unauthorized_export",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.94,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.941739",
+    "last_updated": "2026-06-19 23:08:35.943285",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  },
+  "DCR-2026-0015": {
+    "id": "DCR-2026-0015",
+    "name": "Evidence Suppression",
+    "description": "Agents suppress evidence of their actions.",
+    "severity": "high",
+    "required_actions": [
+      {
+        "agent": "alice",
+        "action": "delete_logs"
+      }
+    ],
+    "witness_hash": "seed_evidence_suppression",
+    "counterfactual_verified": true,
+    "governance_decision": "DENY",
+    "confidence": 0.91,
+    "occurrence_count": 1,
+    "first_seen": "2026-06-19 23:08:35.944632",
+    "last_updated": "2026-06-19 23:08:35.946288",
+    "affected_traces": [],
+    "discovered_by": "DecisionAssure Seed",
+    "affected_frameworks": [],
+    "references": [],
+    "status": "approved",
+    "timeline": [],
+    "historical_replay_count": 0,
+    "previously_missed_incidents": 0,
+    "coverage_gain": 0.0
+  }
+}

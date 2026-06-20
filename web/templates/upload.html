@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Trace - DCR</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔐 DCR</h1>
+            <p class="tagline">The CVE Database for AI Agents</p>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/registry">Registry</a>
+                <a href="/upload">Upload Trace</a>
+                <a href="/admin">Admin</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <h2>Upload Agent Trace</h2>
+        <p>Submit an execution trace from any framework to discover emergent capabilities and get a governance score.</p>
+
+        <div class="upload-form">
+            <div class="form-group">
+                <label for="framework-select">Framework:</label>
+                <select id="framework-select">
+                    <option value="auto">Auto-detect</option>
+                    <option value="openai">OpenAI Agents</option>
+                    <option value="autogen">AutoGen</option>
+                    <option value="crewai">CrewAI</option>
+                    <option value="langgraph">LangGraph</option>
+                    <option value="generic">Generic JSON (actions array)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="trace-input">Paste your trace JSON:</label>
+                <textarea id="trace-input" rows="15" placeholder='{"actions": [{"agent": "alice", "action": "read_credentials"}]}'></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="trace-upload">Or upload a JSON file:</label>
+                <input type="file" id="trace-upload" accept=".json">
+            </div>
+
+            <button class="btn btn-primary" onclick="uploadTrace()">Analyze Trace</button>
+        </div>
+
+        <div id="results" class="results hidden">
+            <h3>Analysis Results</h3>
+            <div id="results-content"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>DecisionAssure Capability Registry (DCR) — Version 1.0.0</p>
+        </div>
+    </footer>
+
+    <script>
+        function uploadTrace() {
+            const textarea = document.getElementById('trace-input');
+            const fileInput = document.getElementById('trace-upload');
+            const framework = document.getElementById('framework-select').value;
+            const resultsDiv = document.getElementById('results');
+            const contentDiv = document.getElementById('results-content');
+
+            let traceData = null;
+
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        traceData = JSON.parse(e.target.result);
+                        sendTrace(traceData, framework);
+                    } catch (err) {
+                        contentDiv.innerHTML = `<p class="error">❌ Invalid JSON file: ${err.message}</p>`;
+                        resultsDiv.classList.remove('hidden');
+                    }
+                };
+                reader.readAsText(fileInput.files[0]);
+            } else {
+                try {
+                    traceData = JSON.parse(textarea.value);
+                    sendTrace(traceData, framework);
+                } catch (err) {
+                    contentDiv.innerHTML = `<p class="error">❌ Invalid JSON: ${err.message}</p>`;
+                    resultsDiv.classList.remove('hidden');
+                }
+            }
+        }
+
+        function sendTrace(traceData, framework) {
+            const contentDiv = document.getElementById('results-content');
+            const resultsDiv = document.getElementById('results');
+
+            resultsDiv.classList.remove('hidden');
+            contentDiv.innerHTML = '🔍 Analyzing trace...';
+
+            let payload = {};
+            if (framework === 'generic') {
+                payload = traceData;
+            } else {
+                payload = {
+                    trace: traceData,
+                    framework: framework
+                };
+            }
+
+            fetch('/upload', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(errData => {
+                        throw new Error(errData.error || `Server error (${response.status})`);
+                    }).catch(() => {
+                        throw new Error(`Server error (${response.status})`);
+                    });
+                }
+                return response.json();
+            })
+            .then(data => {
+                renderResults(data);
+            })
+            .catch(err => {
+                contentDiv.innerHTML = `<p class="error">❌ Error: ${err.message}</p>`;
+            });
+        }
+
+        function renderResults(data) {
+            const contentDiv = document.getElementById('results-content');
+
+            if (data.error) {
+                contentDiv.innerHTML = `<p class="error">❌ ${data.error}</p>`;
+                return;
+            }
+
+            let html = `
+                <div class="result-grid">
+                    <div class="result-card">
+                        <h4>Trace ID</h4>
+                        <p><code>${data.trace_id || 'N/A'}</code></p>
+                    </div>
+                    <div class="result-card">
+                        <h4>Governance Score</h4>
+                        <p class="score">${data.governance_score ? data.governance_score.score : 'N/A'} / 100</p>
+                        ${data.governance_score ? `
+                        <p>Continuity: ${data.governance_score.continuity || 0}%</p>
+                        <p>Evidence: ${data.governance_score.evidence || 0}%</p>
+                        <p>Rollback: ${data.governance_score.rollback || 0}%</p>
+                        ` : ''}
+                    </div>
+                    <div class="result-card">
+                        <h4>Status</h4>
+                        <p class="status ${data.status || 'pending'}">${data.status || 'pending'}</p>
+                        ${data.status === 'pending' ? '<p>🔄 This capability is pending human review</p>' : ''}
+                    </div>
+                    <div class="result-card">
+                        <h4>DCR Records</h4>
+                        <p class="score">${data.dcr_count || 0}</p>
+                        <p>Total capabilities in registry</p>
+                    </div>
+                </div>
+            `;
+
+            // Early warnings
+            if (data.early_warnings && data.early_warnings.length > 0) {
+                html += `<div class="early-warning"><h4>⚠️ EARLY WARNING: Unknown Capability Discovered</h4>`;
+                data.early_warnings.forEach(w => {
+                    html += `
+                        <p><strong>Capability:</strong> ${w.name}</p>
+                        <p><strong>Confidence:</strong> ${(w.confidence * 100).toFixed(1)}%</p>
+                        <p><strong>Severity:</strong> ${w.severity}</p>
+                        <p><a href="/capability/${w.id}" class="btn btn-primary">View DCR Record</a></p>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            // Registered DCRs
+            if (data.registered_dcrs && data.registered_dcrs.length > 0) {
+                html += `<h4>✅ New DCR Records Created</h4><ul>`;
+                data.registered_dcrs.forEach(dcr => {
+                    const isEarly = dcr.early_warning ? '⚠️ ' : '';
+                    html += `<li>${isEarly}<a href="/capability/${dcr.id}"><strong>${dcr.id}</strong></a> – ${dcr.name} (${dcr.severity}, ${(dcr.confidence * 100).toFixed(1)}% confidence)</li>`;
+                });
+                html += `</ul>`;
+            }
+
+            if (data.matched_capabilities && data.matched_capabilities.length > 0) {
+                html += `<h4>🔗 Matched Existing Capabilities</h4><ul>`;
+                data.matched_capabilities.forEach(cap => {
+                    html += `<li><a href="/capability/${cap}">${cap}</a></li>`;
+                });
+                html += `</ul>`;
+            }
+
+            if (!data.registered_dcrs && !data.matched_capabilities) {
+                html += `<p>No capabilities discovered in this trace.</p>`;
+            }
+
+            contentDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+[
+  {
+    "timestamp": "2026-06-19T22:53:21.143231",
+    "coverage": 0.0,
+    "total_capabilities": 1,
+    "classified": 0
+  },
+  {
+    "timestamp": "2026-06-19T22:53:35.970179",
+    "coverage": 66.66666666666666,
+    "total_capabilities": 2,
+    "classified": 2
+  },
+  {
+    "timestamp": "2026-06-19T22:53:56.260722",
+    "coverage": 33.33333333333333,
+    "total_capabilities": 2,
+    "classified": 1
+  },
+  {
+    "timestamp": "2026-06-19T22:54:12.793219",
+    "coverage": 75.0,
+    "total_capabilities": 3,
+    "classified": 3
+  },
+  {
+    "timestamp": "2026-06-19T23:01:49.165679",
+    "coverage": 50.0,
+    "total_capabilities": 3,
+    "classified": 2
+  },
+  {
+    "timestamp": "2026-06-19T23:02:08.285117",
+    "coverage": 80.0,
+    "total_capabilities": 4,
+    "classified": 4
+  },
+  {
+    "timestamp": "2026-06-19T23:08:35.947775",
+    "coverage": 93.75,
+    "total_capabilities": 15,
+    "classified": 15
+  }
+]

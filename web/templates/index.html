@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DecisionAssure - Find the AI Capabilities Your Governance Never Knew Existed</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔐 DCR</h1>
+            <p class="tagline">The CVE Database for AI Agents</p>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/registry">Registry</a>
+                <a href="/upload">Upload Trace</a>
+                <a href="/admin">Admin</a>
+                <a href="/pilot">Enterprise Pilot</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- ===== BUYER-FIRST HERO ===== -->
+        <section class="hero enterprise-hero">
+            <h1>Discover AI incidents your governance never knew existed.</h1>
+            <p class="hero-subheadline">DecisionAssure discovers unknown agent behaviors, proves they existed, and replays history to uncover missed incidents.</p>
+            <p class="hero-tagline">The CVE Database for AI Agents</p>
+            <div class="hero-observable">
+                <div class="observable-item">
+                    <span class="observable-number">{{ stats.coverage_percent }}%</span>
+                    <span class="observable-label">Governance Coverage</span>
+                </div>
+                <div class="observable-item">
+                    <span class="observable-number">{{ stats.previously_missed }}</span>
+                    <span class="observable-label">Missed Incidents Found</span>
+                </div>
+                <div class="observable-item">
+                    <span class="observable-number">{{ stats.total_capabilities }}</span>
+                    <span class="observable-label">Capabilities Added</span>
+                </div>
+            </div>
+            <div class="hero-cta">
+                <a href="/upload" class="btn btn-primary btn-large">Discover Unknown Capabilities →</a>
+                <a href="/pilot" class="btn btn-secondary btn-large">Enterprise Pilot</a>
+            </div>
+        </section>
+
+        <!-- ===== REAL INCIDENT EXAMPLE ===== -->
+        <section class="incident-example">
+            <h2>Real Incident Example</h2>
+            <div class="incident-detail">
+                <h3>Credential Exfiltration</h3>
+                <div class="incident-steps">
+                    <div class="step">
+                        <span class="step-label">Observed:</span>
+                        <span>Agent A requested credentials.</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-label">Observed:</span>
+                        <span>Agent B retrieved them.</span>
+                    </div>
+                    <div class="step">
+                        <span class="step-label">Observed:</span>
+                        <span>Agent B exported data.</span>
+                    </div>
+                </div>
+                <div class="incident-counterfactual">
+                    <span class="cf-label">Counterfactual Verification:</span>
+                    <span>Remove credential retrieval → capability disappears.</span>
+                </div>
+                <div class="incident-result">
+                    <span class="result-badge">✅ Verified hidden exfiltration capability.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== RECOMMENDED GOVERNANCE CONTROLS ===== -->
+        <section class="governance-controls">
+            <h2>Recommended Governance Controls</h2>
+            <div class="controls-grid">
+                <div class="control-card">
+                    <h4>Credential Exfiltration</h4>
+                    <p><strong>Recommendation:</strong> Require approval before credential access.</p>
+                    <p><strong>Priority:</strong> Critical</p>
+                    <p><strong>Risk Reduction:</strong> High</p>
+                </div>
+                <div class="control-card">
+                    <h4>Hidden Delegation Chain</h4>
+                    <p><strong>Recommendation:</strong> Enforce max delegation depth of 2.</p>
+                    <p><strong>Priority:</strong> High</p>
+                    <p><strong>Risk Reduction:</strong> Medium</p>
+                </div>
+                <div class="control-card">
+                    <h4>Unauthorized Model Export</h4>
+                    <p><strong>Recommendation:</strong> Add allowlist for export destinations.</p>
+                    <p><strong>Priority:</strong> Critical</p>
+                    <p><strong>Risk Reduction:</strong> High</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== STATS GRID ===== -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <h3>{{ stats.total_capabilities }}</h3>
+                <p>Total DCR Records</p>
+            </div>
+            <div class="stat-card critical">
+                <h3>{{ stats.critical_severity }}</h3>
+                <p>Critical</p>
+            </div>
+            <div class="stat-card high">
+                <h3>{{ stats.high_severity }}</h3>
+                <p>High Severity</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ stats.total_traces }}</h3>
+                <p>Traces Analyzed</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ stats.previously_missed }}</h3>
+                <p>Previously Missed Incidents Found</p>
+            </div>
+            <div class="stat-card">
+                <h3>{{ stats.unknown_capabilities }}</h3>
+                <p>Pending Review</p>
+            </div>
+        </section>
+
+        <!-- ===== COVERAGE TIMELINE (de‑emphasised GKAI) ===== -->
+        <section class="timeline-section">
+            <h2>Governance Learning Over Time</h2>
+            <div class="chart-container">
+                <canvas id="coverageChart"></canvas>
+            </div>
+            <div class="timeline-summary">
+                <span class="summary-label">Coverage</span>
+                <span class="summary-value">{{ stats.coverage_percent }}%</span>
+                <span class="summary-change">+{{ stats.coverage_percent - 10 if stats.coverage_percent > 10 else 0 }}% since start</span>
+            </div>
+        </section>
+
+        <!-- ===== LATEST DCR RECORDS ===== -->
+        <section class="recent">
+            <h2>Latest Discovered Capabilities</h2>
+            <p class="section-subtitle">Each capability is cryptographically witnessed, counterfactually verified, and tracked over time.</p>
+            <div class="capability-list">
+                {% if latest %}
+                    {% for cap in latest %}
+                    <div class="capability-card">
+                        <span class="severity {{ cap.severity }}">{{ cap.severity }}</span>
+                        <h3><a href="/capability/{{ cap.id }}">{{ cap.name }}</a></h3>
+                        <div class="dcr-id-small">{{ cap.id }}</div>
+                        <p>{{ cap.description[:120] }}{% if cap.description|length > 120 %}...{% endif %}</p>
+                        <div class="meta">
+                            <span>Confidence: {{ (cap.confidence * 100)|int }}%</span>
+                            <span>Occurrences: {{ cap.occurrence_count }}</span>
+                            <span>Status: {{ cap.status }}</span>
+                        </div>
+                        <div class="badges">
+                            <span class="badge">{{ cap.required_actions|length }} required actions</span>
+                            <span class="badge">{% if cap.counterfactual_verified %}✅ Verified{% else %}⚠️ Pending{% endif %}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <p>📭 No capabilities discovered yet.</p>
+                        <p>Upload a trace to find unknown agent behaviors.</p>
+                        <a href="/upload" class="btn btn-primary">Upload Trace</a>
+                    </div>
+                {% endif %}
+            </div>
+            <a href="/registry" class="btn">View All Capabilities →</a>
+        </section>
+
+        <!-- ===== SUPPORTED FRAMEWORKS ===== -->
+        <section class="frameworks">
+            <h2>Works With Your Existing Agent Stack</h2>
+            <div class="framework-grid">
+                <span class="framework-tag">OpenAI Agents SDK</span>
+                <span class="framework-tag">AutoGen</span>
+                <span class="framework-tag">CrewAI</span>
+                <span class="framework-tag">LangGraph</span>
+                <span class="framework-tag">MCP</span>
+                <span class="framework-tag">OpenTelemetry</span>
+                <span class="framework-tag">Generic JSON</span>
+            </div>
+            <p class="small-note">Ingest traces from any framework – no code changes required.</p>
+        </section>
+
+        <!-- ===== CASE STUDY DOWNLOAD ===== -->
+        <section class="case-study">
+            <h2>📊 Public Case Study</h2>
+            <div class="case-grid">
+                <div class="case-item">
+                    <span class="case-label">Input</span>
+                    <span class="case-value">100 traces</span>
+                </div>
+                <div class="case-item">
+                    <span class="case-label">Capabilities Discovered</span>
+                    <span class="case-value">4</span>
+                </div>
+                <div class="case-item">
+                    <span class="case-label">Missed Incidents Found</span>
+                    <span class="case-value">3</span>
+                </div>
+                <div class="case-item">
+                    <span class="case-label">Coverage Increase</span>
+                    <span class="case-value">6%</span>
+                </div>
+            </div>
+            <a href="/static/case_study.pdf" class="btn btn-primary" download>📄 Download Case Study (PDF)</a>
+        </section>
+
+        <!-- ===== ENTERPRISE PILOT CTA ===== -->
+        <section class="cta pilot-cta">
+            <h2>🚀 Enterprise Pilot - Governance Gap Assessment</h2>
+            <p>Upload your agent traces. DecisionAssure discovers unknown capabilities, generates cryptographic witnesses, and replays history to find incidents your governance missed.</p>
+            <div class="pilot-offer">
+                <span class="price">$1,500</span>
+                <span class="guarantee">Pay only if satisfied</span>
+            </div>
+            <a href="/pilot" class="btn btn-primary">Start Your Pilot →</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>DecisionAssure — The CVE Database for AI Agents</p>
+            <p>Discover unknown capabilities before they become incidents.</p>
+            <p class="footer-version">Version 1.0.0</p>
+        </div>
+    </footer>
+
+    <script src="/static/script.js"></script>
+
+    <!-- ===== TIMELINE CHART ===== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/timeline')
+                .then(res => res.json())
+                .then(data => {
+                    const chartContainer = document.querySelector('.timeline-section .chart-container');
+                    if (data.length === 0) {
+                        chartContainer.innerHTML = '<p style="text-align:center; color:#94a3b8; padding:40px 0;">No coverage history yet. Upload traces and approve capabilities to build the timeline.</p>';
+                        return;
+                    }
+                    const labels = data.map(d => new Date(d.timestamp).toLocaleDateString());
+                    const coverages = data.map(d => d.coverage);
+                    const ctx = document.getElementById('coverageChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Governance Coverage (%)',
+                                data: coverages,
+                                borderColor: '#60a5fa',
+                                backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                                fill: true,
+                                tension: 0.3
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    labels: { color: '#e2e8f0' }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    min: 0,
+                                    max: 100,
+                                    ticks: { color: '#94a3b8' }
+                                },
+                                x: {
+                                    ticks: { color: '#94a3b8' }
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(err => {
+                    console.error('Failed to load timeline data:', err);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+  "TRACE-20260619-0001": {
+    "id": "TRACE-20260619-0001",
+    "trace_hash": "4404c18fc77261e175bbb8801a73fa355d83c6401478de2015b64ace20cf7e63",
+    "actions": [
+      {
+        "agent": "alice",
+        "action": "tool"
+      },
+      {
+        "agent": "bob",
+        "action": "tool"
+      }
+    ],
+    "discovered_capabilities": [
+      "DCR-2026-0001"
+    ],
+    "governance_score": 0.0,
+    "timestamp": "2026-06-19 22:36:09.506303",
+    "uploaded_by": "anonymous",
+    "status": "approved"
+  },
+  "TRACE-20260619-0002": {
+    "id": "TRACE-20260619-0002",
+    "trace_hash": "3df31624719e1c3c78d0e303654a4e5b18e5a47069a292012df5868a15ad9b4a",
+    "actions": [
+      {
+        "agent": "researcher",
+        "action": "execute_task"
+      },
+      {
+        "agent": "exporter",
+        "action": "execute_task"
+      }
+    ],
+    "discovered_capabilities": [
+      "DCR-2026-0002"
+    ],
+    "governance_score": 0.0,
+    "timestamp": "2026-06-19 22:53:21.140966",
+    "uploaded_by": "anonymous",
+    "status": "approved"
+  },
+  "TRACE-20260619-0003": {
+    "id": "TRACE-20260619-0003",
+    "trace_hash": "6fcfd7bfdb06630a0b9ff508352d2395e436731afe220e636aa9b2866de68858",
+    "actions": [
+      {
+        "agent": "researcher",
+        "action": "message"
+      },
+      {
+        "agent": "researcher",
+        "action": "message"
+      },
+      {
+        "agent": "compliance_officer",
+        "action": "message"
+      }
+    ],
+    "discovered_capabilities": [
+      "DCR-2026-0003"
+    ],
+    "governance_score": 0.0,
+    "timestamp": "2026-06-19 22:53:56.258584",
+    "uploaded_by": "anonymous",
+    "status": "approved"
+  },
+  "TRACE-20260619-0004": {
+    "id": "TRACE-20260619-0004",
+    "trace_hash": "6cbc92789eb795d50eb04a67b3f50ba2779f7535829b380fc14dec3c87c6a050",
+    "actions": [
+      {
+        "agent": "alice",
+        "action": "read_credentials"
+      },
+      {
+        "agent": "bob",
+        "action": "export_data"
+      }
+    ],
+    "discovered_capabilities": [
+      "DCR-2026-0004"
+    ],
+    "governance_score": 0.0,
+    "timestamp": "2026-06-19 23:01:49.163629",
+    "uploaded_by": "anonymous",
+    "status": "approved"
+  }
+}

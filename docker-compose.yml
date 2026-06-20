@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  dcr:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      - SECRET_KEY=your-secret-key
+      - DATABASE_URL=sqlite:///data/registry.db
+      - DEBUG=False
+    restart: unless-stopped

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ capability.name }} - DCR</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔐 DCR</h1>
+            <p class="tagline">The CVE Database for AI Agents</p>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/registry">Registry</a>
+                <a href="/upload">Upload Trace</a>
+                <a href="/admin">Admin</a>
+                <a href="/pilot">Enterprise Pilot</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="capability-detail">
+            <div class="header">
+                <span class="severity large {{ capability.severity }}">{{ capability.severity|upper }}</span>
+                <h1>{{ capability.name }}</h1>
+                <div class="dcr-id"><strong>{{ capability.id }}</strong></div>
+                <div class="status-badge {{ capability.status }}">{{ capability.status|upper }}</div>
+            </div>
+
+            <div class="grid">
+                <div class="left-column">
+                    <div class="section">
+                        <h3>Description</h3>
+                        <p>{{ capability.description }}</p>
+                    </div>
+
+                    <div class="section">
+                        <h3>Required Actions</h3>
+                        <ul class="action-list">
+                            {% for action in capability.required_actions %}
+                            <li><span class="agent">{{ action.agent }}</span> → <span class="action">{{ action.action }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="section">
+                        <h3>Counterfactual Proof</h3>
+                        <p>Removing any single required action breaks the capability.</p>
+                        <ul>
+                            {% for action in capability.required_actions %}
+                            <li>Remove <strong>{{ action.agent }} → {{ action.action }}</strong> → capability <strong>{% if capability.counterfactual_verified %}disappears{% else %}may still exist{% endif %}</strong></li>
+                            {% endfor %}
+                        </ul>
+                        <p>✅ Counterfactual verified: {{ capability.counterfactual_verified }}</p>
+                    </div>
+
+                    {% if timeline %}
+                    <div class="section">
+                        <h3>Timeline</h3>
+                        <ul class="timeline">
+                            {% for event in timeline %}
+                            <li>
+                                <strong>{{ event.event }}</strong> – {{ event.timestamp[:10] }}
+                                <p class="event-desc">{{ event.description }}</p>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="right-column">
+                    <div class="section">
+                        <h3>DCR Details</h3>
+                        <table class="detail-table">
+                            <tr><td>DCR ID</td><td><strong>{{ capability.id }}</strong></td></tr>
+                            <tr><td>Witness Hash</td><td><code>{{ capability.witness_hash }}</code></td></tr>
+                            <tr><td>Counterfactual Verified</td><td>{% if capability.counterfactual_verified %}✅ Yes{% else %}❌ No{% endif %}</td></tr>
+                            <tr><td>Governance Decision</td><td><span class="decision {{ capability.governance_decision }}">{{ capability.governance_decision }}</span></td></tr>
+                            <tr><td>Confidence</td><td>{{ (capability.confidence * 100)|int }}%</td></tr>
+                            <tr><td>Occurrence Count</td><td>{{ capability.occurrence_count }}</td></tr>
+                            <tr><td>First Seen</td><td>{{ capability.first_seen.strftime('%Y-%m-%d %H:%M') }}</td></tr>
+                            <tr><td>Last Updated</td><td>{{ capability.last_updated.strftime('%Y-%m-%d %H:%M') }}</td></tr>
+                            <tr><td>Status</td><td><span class="status-badge {{ capability.status }}">{{ capability.status }}</span></td></tr>
+                            <tr><td>Affected Traces</td><td>{{ capability.affected_traces|length }}</td></tr>
+                            <tr><td>Historical Replay</td><td>{{ capability.historical_replay_count }} runs, {{ capability.previously_missed_incidents }} missed incidents found</td></tr>
+                        </table>
+                    </div>
+
+                    <div class="section">
+                        <h3>Replay Analysis</h3>
+                        <button class="btn btn-primary" onclick="replayCapability('{{ capability.id }}')">Run Historical Replay</button>
+                        <div id="replay-result" class="replay-result hidden"></div>
+                    </div>
+
+                    <div class="section">
+                        <h3>Download Report</h3>
+                        <a href="/report/{{ capability.id }}" class="btn btn-primary">📄 Download DCR Report (PDF)</a>
+                    </div>
+
+                    {% if capability.affected_frameworks %}
+                    <div class="section">
+                        <h3>Affected Frameworks</h3>
+                        <div class="framework-tags">
+                            {% for framework in capability.affected_frameworks %}
+                            <span class="tag">{{ framework }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>DecisionAssure Capability Registry (DCR) — Version 1.0.0</p>
+        </div>
+    </footer>
+
+    <script>
+        function replayCapability(dcrId) {
+            const resultDiv = document.getElementById('replay-result');
+            resultDiv.classList.remove('hidden');
+            resultDiv.innerHTML = 'Running replay...';
+            fetch('/capability/' + dcrId + '/replay')
+                .then(res => res.json())
+                .then(data => {
+                    resultDiv.innerHTML = `
+                        <h4>Replay Results</h4>
+                        <p><strong>Missed Incidents Found:</strong> ${data.missed_incidents}</p>
+                        <p><strong>Total Traces Scanned:</strong> ${data.total_traces}</p>
+                        <p><strong>Coverage Gain:</strong> ${data.coverage_gain}%</p>
+                    `;
+                })
+                .catch(err => {
+                    resultDiv.innerHTML = '<p class="error">Error: ' + err.message + '</p>';
+                });
+        }
+    </script>
+</body>
+</html>

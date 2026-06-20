@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCR Registry</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔐 DCR</h1>
+            <p class="tagline">The CVE Database for AI Agents</p>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/registry">Registry</a>
+                <a href="/upload">Upload Trace</a>
+                <a href="/admin">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Capability Registry</h2>
+        <p>All discovered and verified emergent agent capabilities. <strong>{{ capabilities|length }} DCR records</strong>.</p>
+
+        <div class="filters">
+            <input type="text" id="search" placeholder="Search capabilities..." onkeyup="filterCapabilities()">
+            <select id="severity-filter" onchange="filterCapabilities()">
+                <option value="">All Severities</option>
+                <option value="critical">Critical</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+            </select>
+        </div>
+
+        <div class="capability-list" id="capability-list">
+            {% if capabilities %}
+                {% for cap in capabilities %}
+                <div class="capability-card" data-severity="{{ cap.severity }}" data-name="{{ cap.name }}" data-id="{{ cap.id }}">
+                    <span class="severity {{ cap.severity }}">{{ cap.severity }}</span>
+                    <h3><a href="/capability/{{ cap.id }}">{{ cap.name }}</a></h3>
+                    <!-- ===== DCR ID DISPLAYED PROMINENTLY (like CVE) ===== -->
+                    <div class="dcr-id-small">{{ cap.id }}</div>
+                    <p>{{ cap.description[:150] }}{% if cap.description|length > 150 %}...{% endif %}</p>
+                    <div class="meta">
+                        <span>Confidence: {{ (cap.confidence * 100)|int }}%</span>
+                        <span>Occurrences: {{ cap.occurrence_count }}</span>
+                        <span>Status: {{ cap.status }}</span>
+                    </div>
+                    <div class="badges">
+                        <span class="badge">{{ cap.required_actions|length }} required actions</span>
+                        <span class="badge">{% if cap.counterfactual_verified %}✅ Verified{% else %}⚠️ Pending{% endif %}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <p>📭 No capabilities registered yet.</p>
+                    <p>Upload a trace to discover one.</p>
+                    <a href="/upload" class="btn btn-primary">Upload Trace</a>
+                </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>DecisionAssure Capability Registry (DCR) — Version 1.0.0</p>
+        </div>
+    </footer>
+
+    <script>
+        function filterCapabilities() {
+            const query = document.getElementById('search').value.toLowerCase();
+            const severity = document.getElementById('severity-filter').value;
+            const cards = document.querySelectorAll('.capability-card');
+            cards.forEach(card => {
+                const name = card.dataset.name.toLowerCase();
+                const id = card.dataset.id.toLowerCase();
+                const cardSeverity = card.dataset.severity;
+                const matchesSearch = name.includes(query) || id.includes(query);
+                const matchesSeverity = !severity || cardSeverity === severity;
+                card.style.display = matchesSearch && matchesSeverity ? 'block' : 'none';
+            });
+        }
+    </script>
+</body>
+</html>

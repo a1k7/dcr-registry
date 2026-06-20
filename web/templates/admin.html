@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - DCR</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔐 DCR</h1>
+            <p class="tagline">The CVE Database for AI Agents</p>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/registry">Registry</a>
+                <a href="/upload">Upload Trace</a>
+                <a href="/admin">Admin</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Admin Panel</h2>
+        <p>Review pending capabilities discovered from uploaded traces.</p>
+
+        {% if pending %}
+        <div class="pending-list">
+            {% for trace in pending %}
+            <div class="pending-item">
+                <div class="pending-header">
+                    <span class="trace-id">{{ trace.id }}</span>
+                    <span class="trace-date">{{ trace.timestamp.strftime('%Y-%m-%d %H:%M') }}</span>
+                </div>
+                <div class="pending-content">
+                    <p><strong>Actions:</strong></p>
+                    <ul>
+                        {% for action in trace.actions[:5] %}
+                        <li>{{ action.agent }} → {{ action.action }}</li>
+                        {% endfor %}
+                        {% if trace.actions|length > 5 %}
+                        <li>... and {{ trace.actions|length - 5 }} more</li>
+                        {% endif %}
+                    </ul>
+                    <p><strong>Governance Score:</strong> {{ trace.governance_score }} / 100</p>
+                    <div class="pending-actions">
+                        <button class="btn btn-success" onclick="approveTrace('{{ trace.id }}')">Approve</button>
+                        <button class="btn btn-danger" onclick="rejectTrace('{{ trace.id }}')">Reject</button>
+                    </div>
+                    <div id="approve-form-{{ trace.id }}" class="approve-form hidden">
+                        <input type="text" id="name-{{ trace.id }}" placeholder="Capability Name">
+                        <select id="severity-{{ trace.id }}">
+                            <option value="critical">Critical</option>
+                            <option value="high">High</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="confirmApprove('{{ trace.id }}')">Confirm Approve</button>
+                        <button class="btn btn-secondary" onclick="cancelApprove('{{ trace.id }}')">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>No pending capabilities to review. 🎉</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>DecisionAssure Capability Registry (DCR) — Version {{ dcr_version }}</p>
+        </div>
+    </footer>
+
+    <script>
+        function approveTrace(traceId) {
+            document.getElementById(`approve-form-${traceId}`).classList.remove('hidden');
+        }
+
+        function cancelApprove(traceId) {
+            document.getElementById(`approve-form-${traceId}`).classList.add('hidden');
+        }
+
+        function confirmApprove(traceId) {
+            const name = document.getElementById(`name-${traceId}`).value;
+            const severity = document.getElementById(`severity-${traceId}`).value;
+
+            if (!name) {
+                alert('Please enter a capability name.');
+                return;
+            }
+
+            fetch('/api/admin/approve', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    trace_id: traceId,
+                    name: name,
+                    severity: severity
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert(`✅ Capability ${data.capability_id} approved!`);
+                location.reload();
+            })
+            .catch(err => alert('Error: ' + err.message));
+        }
+
+        function rejectTrace(traceId) {
+            if (!confirm('Are you sure you want to reject this capability?')) return;
+            
+            fetch('/api/admin/reject', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({trace_id: traceId})
+            })
+            .then(res => res.json())
+            .then(data => {
+                alert('✅ Trace rejected.');
+                location.reload();
+            })
+            .catch(err => alert('Error: ' + err.message));
+        }
+    </script>
+</body>
+</html>
