@@ -2,7 +2,6 @@
 
 **The CVE Database for AI Agents.**
 
-# DecisionAssure DCR
 
 Discover unknown AI agent capabilities before they become incidents.
 
